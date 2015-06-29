@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/CSharp/DarkKnight.client/bin/Debug
+/CSharp/DarkKnight.client/obj/Debug
+/CSharp/DarkKnight.client/Properties
