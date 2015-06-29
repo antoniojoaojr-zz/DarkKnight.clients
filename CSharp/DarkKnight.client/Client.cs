@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Text;
-using System.Threading;
 
 #region License Information
 /* ************************************************************
@@ -80,11 +79,12 @@ namespace DarkKnight.client
         /// <exception cref="System.Net.Sockets.SocketException">An error occurred when attempting to access the socket. See the Remarks section for more information.</exception>
         /// <exception cref="System.ObjectDisposedException">The System.Net.Sockets.Socket has been closed.</exception>
         /// <exception cref="System.Security.SecurityException">A caller in the call stack does not have the required permissions.</exception>
+        /// <exception cref="System.Exception">If no data received generated a error.</exception>
         public new Packet Receive()
         {
-            while (isReceiving)
+            if (isReceiving)
             {
-                Thread.Sleep(100);
+                receiveWork.WaitOne();
             }
 
             return base.Receive();

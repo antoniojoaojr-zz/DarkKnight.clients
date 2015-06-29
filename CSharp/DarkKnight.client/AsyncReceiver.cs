@@ -46,6 +46,8 @@ namespace DarkKnight.client
         private Packet _packet;
         protected bool isReceiving = false;
 
+        protected ManualResetEvent receiveWork = new ManualResetEvent(false);
+
         /// <summary>
         /// Gets the data received and flush to receive more data async
         /// Used in callback of ReceiveAsync
@@ -53,6 +55,7 @@ namespace DarkKnight.client
         /// <returns>DarkKnight.Packet obj with data</returns>
         public Packet EndReceiver()
         {
+            receiveWork.Set();
             isReceiving = false;
             return _packet;
         }
@@ -86,11 +89,13 @@ namespace DarkKnight.client
         {
             byte[] buffer = new byte[65535];
             int size = _client.Receive(buffer);
+            if (size == 0)
+                throw new Exception("No data received");
+
             byte[] length = new byte[size];
             Array.Copy(buffer, length, size);
 
             return new PacketHandler(length);
-
         }
 
         private void ThreadReceive()
