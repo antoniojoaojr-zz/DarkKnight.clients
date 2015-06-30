@@ -56,6 +56,7 @@ namespace DarkKnight.client
         public Packet EndReceiver()
         {
             receiveWork.Set();
+            receiveWork.Reset();
             isReceiving = false;
             return _packet;
         }
