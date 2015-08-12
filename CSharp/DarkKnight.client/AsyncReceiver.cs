@@ -103,7 +103,7 @@ namespace DarkKnight.client
                 foreach(byte invalidData in received.invalidData)
                     debug += invalidData+", ";
 
-                throw new Exception("Invalid data received from server {debug: {debug}}");
+                throw new Exception("Invalid data received from server {debug: {"+debug+"}}");
             }
 
             return received;
