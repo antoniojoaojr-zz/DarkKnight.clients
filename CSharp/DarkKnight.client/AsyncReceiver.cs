@@ -96,7 +96,17 @@ namespace DarkKnight.client
             byte[] length = new byte[size];
             Array.Copy(buffer, length, size);
 
-            return new PacketHandler(length);
+            PacketHandler received = new PacketHandler(length);
+            if (received.format.getStringFormat == "???" && received.data.Length == 0)
+            {
+                string debug = "";
+                foreach(byte invalidData in received.invalidData)
+                    debug += invalidData+", ";
+
+                throw new Exception("Invalid data received from server {debug: {debug}}");
+            }
+
+            return received;
         }
 
         private void ThreadReceive()

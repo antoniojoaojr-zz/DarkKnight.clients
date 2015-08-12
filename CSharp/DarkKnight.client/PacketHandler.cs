@@ -32,6 +32,7 @@ namespace DarkKnight.client
         /// The real package received from a client socket
         /// </summary>
         private byte[] originalPacket;
+        public byte[] invalidData;
 
 
         public PacketHandler(byte[] packet)
@@ -45,6 +46,7 @@ namespace DarkKnight.client
                 // if handler is fail, set a default invalid packet
                 _format = new PacketFormat("???");
                 _packet = new byte[] { };
+                invalidData = packet;
             }
         }
 
