@@ -34,7 +34,7 @@ namespace DarkKnight.client
         /// <summary>
         /// The client object request transport
         /// </summary>
-        private Client client;
+        private Connection client;
 
         /// <summary>
         /// The socket object responsible for performing transport
@@ -57,7 +57,7 @@ namespace DarkKnight.client
         {
             get { return _lastSend; }
         }
-        public DataTransport(Client clientObj, Socket socketObj)
+        public DataTransport(Connection clientObj, Socket socketObj)
         {
             client = clientObj;
             socket = socketObj;
