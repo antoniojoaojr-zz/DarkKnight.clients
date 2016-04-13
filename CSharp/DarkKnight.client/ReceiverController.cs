@@ -23,37 +23,44 @@ namespace DarkKnight.client
                 return;
 
             byte[] buffer = new byte[65535];
-            int size = socketCore.socket.Receive(buffer);
-            if (size == 0)
+            try
             {
-                if (!socketCore.socket.Connected)
+                int size = socketCore.socket.Receive(buffer);
+                if (size == 0)
+                {
+                    if (!socketCore.socket.Connected)
+                    {
+                        socketCore.Close();
+                        return;
+                    }
+                    Receive();
+                }
+
+                byte[] length = new byte[size];
+                Array.Copy(buffer, length, size);
+
+                PacketHandler packet = new PacketHandler(socketCore.decodeCrypt(length));
+                if (packet.format.getStringFormat == "???" && packet.data.Length == 0)
                 {
                     socketCore.Close();
-                    return;
+                    throw new Exception("Invalid data received from server {debug: {" + packet.invalidData + "}}");
                 }
+
+                foreach (Packet p in packet.packetHandled)
+                {
+                    // send packet received to the app
+                    if (!socketCore.ReceiveAsync)
+                        socketCore.application.Receiver(new Receiver.Encapsule(socketCore._connection, p));
+                    else
+                        (new Thread(() => socketCore.application.Receiver(new Receiver.Encapsule(socketCore._connection, p)))).Start();
+                }
+
                 Receive();
             }
-
-            byte[] length = new byte[size];
-            Array.Copy(buffer, length, size);
-
-            PacketHandler packet = new PacketHandler(socketCore.decodeCrypt(length));
-            if (packet.format.getStringFormat == "???" && packet.data.Length == 0)
+            catch
             {
                 socketCore.Close();
-                throw new Exception("Invalid data received from server {debug: {" + packet.invalidData + "}}");
             }
-
-            foreach (Packet p in packet.packetHandled)
-            {
-                // send packet received to the app
-                if (!socketCore.ReceiveAsync)
-                    socketCore.application.Receiver(new Receiver.Encapsule(socketCore._connection, p));
-                else
-                    (new Thread(() => socketCore.application.Receiver(new Receiver.Encapsule(socketCore._connection, p)))).Start();
-            }
-
-            Receive();
         }
     }
 }

@@ -15,6 +15,10 @@ namespace DarkKnight.client
             new ReceiverController(socketCore, receiver);
         }
 
+        /// <summary>
+        /// When is true you receive packets asynchronous
+        /// if is false the packets are received in sequence
+        /// </summary>
         public bool ReceiveAsync
         {
             get { return socketCore.ReceiveAsync; }
