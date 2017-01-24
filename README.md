@@ -2,7 +2,7 @@
 
 How to use
 
-```sh
+```c#
     class Program
     {
         static void Main(string[] args)
@@ -37,7 +37,7 @@ How to use
 ```
 
 Classe CloudReceveir must be implement ICloud class from DarkKnight.client
-```sh
+```c#
     class CloudReceiver : ICloud
     {
         /// <summary>
